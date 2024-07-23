@@ -54,6 +54,20 @@ class ThreeDimensionMap extends MapboxLoader implements IThreeDimensionsMap {
       ? super.init()
       : super.showUnauthorizedMessage(this.elementId);
   }
+
+  public mapRotate(orientation: "left" | "right") {
+    const easing = (t: number) => t * (2 - t);
+    const deltaDegrees = 45;
+    const bearing =
+      orientation === "left"
+        ? window.mapboxMap.getBearing() - deltaDegrees
+        : window.mapboxMap.getBearing() + deltaDegrees;
+
+    window.mapboxMap.easeTo({
+      bearing,
+      easing,
+    });
+  }
 }
 
 export default ThreeDimensionMap;
