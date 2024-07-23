@@ -20,8 +20,8 @@
     init()
   });
   function init(){
-    const viewer = new window.Viewer('yyg32322',{}, ()=>{}, null, null,{}, ()=>{});
-    viewer.render3DMap('myCanvas')
+    const threeDimensionMap = new window.ThreeDimensionMap('myCanvas','yyg32322', {}, ()=>{}, null, null,{}, ()=>{});
+    threeDimensionMap.init()
   }
 
 </script>

@@ -13,7 +13,7 @@ class Viewer implements IViewer {
     this.token ? (this.isValidToken = true) : (this.isValidToken = false);
   }
 
-  protected steMapWrapperStyle(elementId: string) {
+  protected setMapWrapperStyle(elementId: string) {
     const note: HTMLElement | null = document.querySelector(`#${elementId}`);
 
     if (note) {

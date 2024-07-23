@@ -47,20 +47,12 @@ class ThreeDimensionMap extends MapboxLoader implements IThreeDimensionsMap {
   }
 
   public init(): void {
-    super.steMapWrapperStyle(this.elementId);
-    this.removeMap(this.elementId);
+    super.setMapWrapperStyle(this.elementId);
+    super.removeMap(this.elementId);
 
     this.isValidToken
       ? super.init()
       : super.showUnauthorizedMessage(this.elementId);
-  }
-
-  hiddenBuildingsLayer() {
-    window.mapboxMap.setLayoutProperty(
-      compositeNames.compositeLayer,
-      "visibility",
-      "none",
-    );
   }
 }
 
