@@ -40,7 +40,8 @@ abstract class MapboxLoader extends Map implements IMapboxLoader {
 
     const mapOptions: IOptions = {
       container: this.elementId,
-      style: "mapbox://styles/mapbox/outdoors-v11",
+      //style: "mapbox://styles/mapbox/outdoors-v11",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       center: [this.lng, this.lat],
       zoom,
       minZoom,

@@ -1,7 +1,9 @@
 import get from "lodash/get";
 import * as THREE from "three";
 import utils from "threebox-plugin/src/utils/utils";
+import threeBox from "threebox-plugin";
 import { feature, features } from "../interfaces";
+import { Map, MapContextEvent } from "mapbox-gl";
 
 export function generateMesh(coordinates, color) {
   const points = [];
@@ -43,29 +45,23 @@ export function generateMesh(coordinates, color) {
   return { mesh, line };
 }
 
-// color s
+// colors
 const lineColor = 0x2a6487;
 const primaryColor = 0x6fa9c7;
-const secondaryColor = 0x2a6487;
-const garyLight = 0xececec;
-const garyDark = 0xd8d8d8;
-const buildingsLayerColor = "#fff";
 
-export function addCustomBuildings(
-  features: features,
-  featureSelected: feature,
-) {
+const threeBoxSettings = {
+  defaultLights: true,
+  enableSelectingFeatures: false, // change this to false to disable fill-extrusion features selection
+  enableSelectingObjects: false, // change this to false to disable 3D objects selection
+  enableDraggingObjects: true, // change this to false to disable 3D objects drag & move once selected
+  enableRotatingObjects: true, // change this to false to disable 3D objects rotation once selected
+  enableTooltips: false, // change this to false to disable default tooltips on fill-extrusion and 3D models
+};
+
+export function addCustomBuildings(features: features) {
   let color = primaryColor;
 
   features.map((unit, i) => {
-    color =
-      unit.properties.id == featureSelected.id ? secondaryColor : primaryColor;
-    const available = get(unit, "properties.available", false);
-
-    if (!available) {
-      color = garyLight;
-    }
-
     const coordinates = get(unit, "geometry.coordinates", []);
     const center = get(unit, "center", [0, 0]);
 
@@ -88,12 +84,23 @@ export function addCustomBuildings(
     edge.userData.obj.position.x = 0 - edge.center.x;
     edge.userData.obj.position.y = 0 - edge.center.y;
 
-    if (unit.properties.id == featureSelected.id) {
-      Object3D.name = "featureSelected_";
-      Object3D.userData.properties.clicked = true;
-    }
-
     window.tb.add(edge);
     window.tb.add(Object3D);
   });
+}
+
+export function customBuildingsLayer(geoJson) {
+  return {
+    id: "3d-model",
+    type: "custom",
+    renderingMode: "3d",
+    onAdd: function (map: Map, mbxContext: MapContextEvent) {
+      window.tb = new threeBox.Threebox(map, mbxContext, threeBoxSettings);
+      window.tb.features_selected = [];
+      addCustomBuildings(geoJson.features);
+    },
+    render: function () {
+      window.tb.update();
+    },
+  };
 }
