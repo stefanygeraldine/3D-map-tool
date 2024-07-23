@@ -15,8 +15,8 @@
 <div class="actions" style="position: fixed; z-index: 20; left: 0;top: 0">
     <button id="rotateLeft">Rotate left</button>
     <button id="rotateRight">Rotate right</button>
-    <button>Show Building layer</button>
-    <button>Hidden Building layer</button>
+    <button id="showBuildingsLayer">Show Building layer</button>
+    <button id="hiddenBuildingsLayer">Hidden Building layer</button>
 </div>
 <div id="myCanvas"></div>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
@@ -28,7 +28,13 @@
 
     document.getElementById('rotateLeft').onclick = () => threeDimensionMap.mapRotate('left');
     document.getElementById('rotateRight').onclick = () => threeDimensionMap.mapRotate('right');
-    // Add event listeners for show/hide building layer buttons
+    document.getElementById('showBuildingsLayer').onclick = () => threeDimensionMap.showBuildingsLayer();
+    document.getElementById('hiddenBuildingsLayer').onclick = () => threeDimensionMap.hiddenBuildingsLayer();
+
+    window.addEventListener('resize', ()=>{
+      threeDimensionMap.mapResize()
+    })
+
 
 
 </script>

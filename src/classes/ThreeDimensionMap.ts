@@ -1,11 +1,31 @@
 import { feature, fn, IThreeDimensionsMap, onClickShape } from "../interfaces";
 import get from "lodash/get";
 import MapboxLoader from "./abstrats/MapboxLoader";
+import { AnyLayer } from "mapbox-gl";
 
+const buildingsLayerColor = "#fff";
 const compositeNames = {
   compositeSource: "composite",
   compositeSourceLayer: "building",
   compositeLayer: "3d-buildings",
+};
+const compositeBuildingsLayer: AnyLayer = {
+  id: compositeNames.compositeLayer,
+  source: compositeNames.compositeSource,
+  "source-layer": compositeNames.compositeSourceLayer,
+  // 'filter': ['==', 'extrude', 'true'],
+  type: "fill-extrusion",
+  paint: {
+    "fill-extrusion-color": [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      "transparent",
+      buildingsLayerColor,
+    ],
+    "fill-extrusion-height": ["get", "height"],
+    "fill-extrusion-base": ["get", "min-height"],
+    "fill-extrusion-opacity": 0.9,
+  },
 };
 
 class ThreeDimensionMap extends MapboxLoader implements IThreeDimensionsMap {
@@ -50,9 +70,12 @@ class ThreeDimensionMap extends MapboxLoader implements IThreeDimensionsMap {
     super.setMapWrapperStyle(this.elementId);
     super.removeMap(this.elementId);
 
-    this.isValidToken
-      ? super.init()
-      : super.showUnauthorizedMessage(this.elementId);
+    if (this.isValidToken) {
+      super.init();
+      this.addEventListeners();
+    } else {
+      super.showUnauthorizedMessage(this.elementId);
+    }
   }
 
   public mapRotate(orientation: "left" | "right") {
@@ -66,6 +89,28 @@ class ThreeDimensionMap extends MapboxLoader implements IThreeDimensionsMap {
     window.mapboxMap.easeTo({
       bearing,
       easing,
+    });
+  }
+
+  public showBuildingsLayer() {
+    window.mapboxMap.setLayoutProperty(
+      compositeNames.compositeLayer,
+      "visibility",
+      "visible",
+    );
+  }
+
+  public hiddenBuildingsLayer() {
+    window.mapboxMap.setLayoutProperty(
+      compositeNames.compositeLayer,
+      "visibility",
+      "none",
+    );
+  }
+
+  protected addEventListeners() {
+    window.mapboxMap.on("style.load", () => {
+      window.mapboxMap.addLayer(compositeBuildingsLayer);
     });
   }
 }

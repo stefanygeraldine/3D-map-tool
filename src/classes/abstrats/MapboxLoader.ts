@@ -62,6 +62,9 @@ abstract class MapboxLoader extends Map implements IMapboxLoader {
   mapResize() {
     window.mapboxMap.resize();
   }
+  protected addEventListeners() {
+    // Placeholder for adding event listeners in child classes
+  }
 }
 
 export default MapboxLoader;
