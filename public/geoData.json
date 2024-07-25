@@ -2,19 +2,9 @@
   "type": "FeatureCollection",
   "features": [
     {
-      "id": "524a6b0f-e96f-4c88-9cf3-c0314cf2be32",
-      "type": "Feature",
       "properties": {
-        "id": 1,
-        "available": true,
-        "height": "10",
-        "type": "building"
+        "center": [-73.96332657144407, 40.7793519894075]
       },
-      "center": [
-        -73.96332657144407,
-        40.7793519894075,
-        5.003364549600519
-      ],
       "geometry": {
         "type": "Polygon",
         "coordinates": [

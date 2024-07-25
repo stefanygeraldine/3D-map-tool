@@ -2,8 +2,12 @@ import { feature, fn, IThreeDimensionsMap, onClickShape } from "../interfaces";
 import get from "lodash/get";
 import MapboxLoader from "./abstrats/MapboxLoader";
 import { AnyLayer } from "mapbox-gl";
-import { customBuildingsLayer } from "../utils/three-dimensions-map.utils";
-import GEOJSON from "../utils/geoData.json";
+import {
+  customBuildingsLayer,
+  generateConeCoordinates,
+} from "../utils/three-dimensions-map.utils";
+//import GEOJSON from "../../public/geoData.json";
+//import GEOMETRIES from "../../public/geometries.json";
 
 const buildingsLayerColor = "#fff";
 const compositeNames = {
@@ -112,7 +116,8 @@ class ThreeDimensionMap extends MapboxLoader implements IThreeDimensionsMap {
   protected addEventListeners() {
     window.mapboxMap.on("style.load", () => {
       window.mapboxMap.addLayer(compositeBuildingsLayer);
-      window.mapboxMap.addLayer(customBuildingsLayer(GEOJSON));
+      window.mapboxMap.addLayer(customBuildingsLayer(this.geoJson));
+      //window.mapboxMap.addLayer(customBuildingsLayer(GEOJSON));
     });
   }
 }
